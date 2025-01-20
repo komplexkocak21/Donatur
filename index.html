@@ -4,53 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Donatur</title>
-    <style>
-        .error { color: red; }
-        #total-row { font-weight: bold; } /* Menebalkan baris total */
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Data Donatur</h1>
     <table id="tabel-pemain">
         <thead>
-            <tr></tr>
+            <tr>
+                <th>Nomor</th>
+                <th>Nama</th>
+                <th>Jumlah (Rp)</th>
+            </tr>
         </thead>
         <tbody>
         </tbody>
-        <tfoot> <tr id="total-row">
-                <td colspan="2">Total Terkumpul</td>
-                <td id="total-amount">Rp 0</td> 
-            </tr>
-        </tfoot>
     </table>
     <script>
-        const loadingIndicator = document.createElement('div');
-        loadingIndicator.textContent = "Memuat data...";
-        document.body.appendChild(loadingIndicator);
-
         fetch('data.csv')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
+            .then(response => response.text())
             .then(csv => {
-                const rows = csv.split('\n').filter(row => row.trim() !== "");
-                if (rows.length === 0) {
-                    throw new Error("File CSV kosong.");
-                }
-
-                const headers = rows[0].split(',');
-                const tableHead = document.getElementById('tabel-pemain').getElementsByTagName('thead')[0].getElementsByTagName('tr')[0];
-                headers.forEach(headerText => {
-                    const th = document.createElement('th');
-                    th.textContent = headerText.trim();
-                    tableHead.appendChild(th);
-                });
-
+                const rows = csv.split('\n');
                 const table = document.getElementById('tabel-pemain').getElementsByTagName('tbody')[0];
-                let totalAmount = 0; // Inisialisasi total
-
                 for (let i = 1; i < rows.length; i++) {
-                    const cells = rows
+                    const cells = rows[i].split(',');
+                    if (cells.length === 3 && cells.every(cell => cell.trim() !== "")) { // Check for valid data
+                        const row = table.insertRow();
+                        for (let j = 0; j < cells.length; j++) {
+                            const cell = row.insertCell();
+                            cell.textContent = cells[j].trim(); // Trim whitespace
+                        }
+                    }
+                }
+            });
+    </script>
+</body>
+</html>
