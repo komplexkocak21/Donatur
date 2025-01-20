@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Donatur</title>
-    <style>
-        #total-donasi {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Data Donatur</h1>
@@ -23,8 +18,13 @@
         </thead>
         <tbody>
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align: right; font-weight: bold;">Total Donasi:</td>
+                <td id="total-donasi" style="font-weight: bold;">Rp 0</td>
+            </tr>
+        </tfoot>
     </table>
-    <div id="total-donasi">Total Donasi: Rp 0</div>
 
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
@@ -44,10 +44,10 @@
                     const tableRow = table.insertRow();
                     Object.values(row).forEach((cellData, index) => {
                         const cell = tableRow.insertCell();
-                        if (index === 2) { // Kolom Jumlah (Rp)
+                        if (index === 2) {
                             if (typeof cellData === 'number') {
                                 cell.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(cellData);
-                                totalDonasi += cellData; // Menambahkan ke total
+                                totalDonasi += cellData;
                             } else {
                                 cell.textContent = "Invalid Amount";
                             }
@@ -57,14 +57,13 @@
                     });
                 });
 
-                // Menampilkan total donasi
                 const totalDonasiElement = document.getElementById('total-donasi');
-                totalDonasiElement.textContent = `Total Donasi: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalDonasi)}`;
+                totalDonasiElement.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalDonasi);
             })
             .catch(error => {
                 console.error('Error fetching or processing CSV:', error);
                 const table = document.getElementById('tabel-pemain');
-                table.innerHTML = "<p>Error loading data. Please try again later.</p>";
+                table.innerHTML = "<tr><td colspan='3' style='text-align: center; color: red;'>Error loading data. Please try again later.</td></tr>";
             });
     </script>
 </body>
