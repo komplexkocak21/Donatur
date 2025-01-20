@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Donatur</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        #total-donasi {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Data Donatur</h1>
@@ -19,22 +24,47 @@
         <tbody>
         </tbody>
     </table>
+    <div id="total-donasi">Total Donasi: Rp 0</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
         fetch('data.csv')
-            .then(response => response.text())
-            .then(csv => {
-                const rows = csv.split('\n');
-                const table = document.getElementById('tabel-pemain').getElementsByTagName('tbody')[0];
-                for (let i = 1; i < rows.length; i++) {
-                    const cells = rows[i].split(',');
-                    if (cells.length === 3 && cells.every(cell => cell.trim() !== "")) { // Check for valid data
-                        const row = table.insertRow();
-                        for (let j = 0; j < cells.length; j++) {
-                            const cell = row.insertCell();
-                            cell.textContent = cells[j].trim(); // Trim whitespace
-                        }
-                    }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                return response.text();
+            })
+            .then(csv => {
+                const results = Papa.parse(csv, { header: true, dynamicTyping: true });
+                const table = document.getElementById('tabel-pemain').getElementsByTagName('tbody')[0];
+                let totalDonasi = 0;
+
+                results.data.forEach(row => {
+                    const tableRow = table.insertRow();
+                    Object.values(row).forEach((cellData, index) => {
+                        const cell = tableRow.insertCell();
+                        if (index === 2) { // Kolom Jumlah (Rp)
+                            if (typeof cellData === 'number') {
+                                cell.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(cellData);
+                                totalDonasi += cellData; // Menambahkan ke total
+                            } else {
+                                cell.textContent = "Invalid Amount";
+                            }
+                        } else {
+                            cell.textContent = cellData;
+                        }
+                    });
+                });
+
+                // Menampilkan total donasi
+                const totalDonasiElement = document.getElementById('total-donasi');
+                totalDonasiElement.textContent = `Total Donasi: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalDonasi)}`;
+            })
+            .catch(error => {
+                console.error('Error fetching or processing CSV:', error);
+                const table = document.getElementById('tabel-pemain');
+                table.innerHTML = "<p>Error loading data. Please try again later.</p>";
             });
     </script>
 </body>
