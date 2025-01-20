@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pemain</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Data Pemain</h1>
+    <table id="tabel-pemain">
+        <thead>
+            <tr>
+                <th>Nomor</th>
+                <th>Nama</th>
+                <th>Jumlah Donatur</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        fetch('data.csv')
+            .then(response => response.text())
+            .then(csv => {
+                const rows = csv.split('\n');
+                const table = document.getElementById('tabel-pemain').getElementsByTagName('tbody')[0];
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].split(',');
+                    if (cells.length === 3 && cells.every(cell => cell.trim() !== "")) { // Check for valid data
+                        const row = table.insertRow();
+                        for (let j = 0; j < cells.length; j++) {
+                            const cell = row.insertCell();
+                            cell.textContent = cells[j].trim(); // Trim whitespace
+                        }
+                    }
+                }
+            });
+    </script>
+</body>
+</html>

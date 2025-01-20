@@ -1,0 +1,89 @@
+/* style.css */
+body {
+  font-family: 'Arial', sans-serif; /* Modern font */
+  background: linear-gradient(to bottom right, #e0eafc, #cfdef3); /* Subtle gradient background */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Ensure full viewport height */
+  color: #333;
+}
+
+h1 {
+  color: #2c3e50; /* Darker heading color */
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#container {
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 900px;
+  margin-bottom: 30px; /* Space below the table */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+#tabel-pemain {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#tabel-pemain th,
+#tabel-pemain td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+#tabel-pemain th {
+  background-color: #3498db; /* Brighter blue header */
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#tabel-pemain tr:hover {
+  background-color: #ecf0f1; /* Lighter hover background */
+}
+
+/* Responsive adjustments (improved) */
+@media (max-width: 768px) {
+  #container {
+      width: 95%;
+      padding: 15px;
+  }
+
+  #tabel-pemain th,
+  #tabel-pemain td {
+      padding: 10px;
+      font-size: 0.9em;
+  }
+}
+
+/* Optional: Add some subtle animation */
+#tabel-pemain tr {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/*Stripe effect*/
+#tabel-pemain tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
