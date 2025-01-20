@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Pemain</title>
+</head>
+<body>
+  <h1>Data Pemain</h1>
+  <table id="tabel-pemain">
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Posisi</th>
+        <th>Nomor</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script>
+    fetch('data.csv') // Mengambil data dari file CSV di GitHub
+      .then(response => response.text())
+      .then(csv => {
+        const rows = csv.split('\n');
+        const table = document.getElementById('tabel-pemain').getElementsByTagName('tbody')[0];
+        for (let i = 1; i < rows.length; i++) { // Mulai dari baris kedua (data)
+          const cells = rows[i].split(',');
+          const row = table.insertRow();
+          for (let j = 0; j < cells.length; j++) {
+            const cell = row.insertCell();
+            cell.textContent = cells[j];
+          }
+        }
+      });
+  </script>
+</body>
+</html>
